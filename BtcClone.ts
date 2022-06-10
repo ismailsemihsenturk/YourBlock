@@ -1,2 +1,3 @@
 /* İsmail Semih Şentürk */
-console.log("sa")
+/* Metehan Temel */
+import * as crypto from "crypto";
