@@ -1,0 +1,21 @@
+{
+  "name": "yourblock",
+  "version": "1.0.0",
+  "description": "Btc Clone",
+  "main": "BtcClone.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ismailsemihsenturk/YourBlock.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ismailsemihsenturk/YourBlock/issues"
+  },
+  "homepage": "https://github.com/ismailsemihsenturk/YourBlock#readme"
+}
