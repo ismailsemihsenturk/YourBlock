@@ -26,5 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* İsmail Semih Şentürk */
 /* Metehan Temel */
 const crypto = __importStar(require("crypto"));
-const test = crypto.createSign('SHA256');
-console.log(test);
+const keyPair = crypto.generateKeyPairSync('rsa', {
+    modulusLength: 2048,
+    publicKeyEncoding: { type: 'spki', format: 'pem' },
+    privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+});
+const sign = crypto.createSign('SHA256');
+sign.update("Test");
+console.log(sign.sign(keyPair.privateKey));
