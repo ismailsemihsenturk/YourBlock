@@ -2,10 +2,10 @@
   "name": "yourblock",
   "version": "1.0.0",
   "description": "Btc Clone",
-  "main": "BtcClone.ts",
+  "main": "BtcClone.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node BtcClone.ts"
+    "dev": "tsc -w",
+    "start": "tsc && node ."
   },
   "repository": {
     "type": "git",
