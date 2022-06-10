@@ -121,6 +121,7 @@ class Wallet {
 }
 
 // Örnek kullanım
+// npm start
 
 const iso = new Wallet();
 const mete = new Wallet();
