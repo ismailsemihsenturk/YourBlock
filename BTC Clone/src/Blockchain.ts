@@ -1,20 +1,15 @@
 import * as crypto from "crypto";
 import * as elliptic from "elliptic";
 
-export class T1{
-    constructor(){
-        console.log("ABD");
-    }
-}
 const ec = new elliptic.ec('secp256k1');
 
 export class Transaction{
-    fromAddress:string|null;
+    fromAddress:string;
     toAddress:string;
     amount:number;
     signature:string|null = null;
 
-    constructor(fromAddress:string|null, toAddress:string, amount:number){
+    constructor(fromAddress?:string, toAddress?:string, amount?:number){
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;

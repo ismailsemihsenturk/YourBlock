@@ -23,16 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Blockchain = exports.Block = exports.Transaction = exports.T1 = void 0;
+exports.Blockchain = exports.Block = exports.Transaction = void 0;
 var crypto = __importStar(require("crypto"));
 var elliptic = __importStar(require("elliptic"));
-var T1 = /** @class */ (function () {
-    function T1() {
-        console.log("ABD");
-    }
-    return T1;
-}());
-exports.T1 = T1;
 var ec = new elliptic.ec('secp256k1');
 var Transaction = /** @class */ (function () {
     function Transaction(fromAddress, toAddress, amount) {

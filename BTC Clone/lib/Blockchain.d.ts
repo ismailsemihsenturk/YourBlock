@@ -1,7 +1,4 @@
 import * as elliptic from "elliptic";
-export declare class T1 {
-    constructor();
-}
 export declare class Transaction {
     fromAddress: string | null;
     toAddress: string;

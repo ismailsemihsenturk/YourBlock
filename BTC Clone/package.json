@@ -30,5 +30,8 @@
   },
   "directories": {
     "lib": "lib"
-  }
+  },
+  "browser": {
+    "crypto": false
+}
 }
