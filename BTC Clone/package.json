@@ -2,10 +2,13 @@
   "name": "yourblock",
   "version": "1.0.0",
   "description": "Btc Clone",
-  "main": "BtcClone.js",
+  "main": "lib/BtcClone.js",
+  "types": "lib/BtcClone.d.ts",
   "scripts": {
     "dev": "tsc -w",
-    "start": "tsc && node ."
+    "start": "tsc && node .",
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -13,7 +16,7 @@
   },
   "keywords": [],
   "author": "İsmail Semih Şentürk, Metehan Temel",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ismailsemihsenturk/YourBlock/issues"
   },
@@ -24,5 +27,8 @@
   },
   "dependencies": {
     "elliptic": "^6.5.4"
+  },
+  "directories": {
+    "lib": "lib"
   }
 }

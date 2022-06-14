@@ -23,91 +23,103 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/* İsmail Semih Şentürk */
-/* Metehan Temel */
-const crypto = __importStar(require("crypto"));
-const elliptic = __importStar(require("elliptic"));
-const ec = new elliptic.ec('secp256k1');
-class Transaction {
-    constructor(fromAddress, toAddress, amount) {
+exports.Blockchain = exports.Block = exports.Transaction = exports.T1 = void 0;
+var crypto = __importStar(require("crypto"));
+var elliptic = __importStar(require("elliptic"));
+var T1 = /** @class */ (function () {
+    function T1() {
+        console.log("ABD");
+    }
+    return T1;
+}());
+exports.T1 = T1;
+var ec = new elliptic.ec('secp256k1');
+var Transaction = /** @class */ (function () {
+    function Transaction(fromAddress, toAddress, amount) {
         this.signature = null;
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
     }
-    calculateHash() {
+    Transaction.prototype.calculateHash = function () {
         if (this.fromAddress === null)
             return "";
         return crypto.createHmac('sha256', this.fromAddress + this.toAddress + this.amount).digest('hex');
-    }
-    signTransaction(signingKey) {
+    };
+    Transaction.prototype.signTransaction = function (signingKey) {
         if (signingKey.getPublic('hex') !== this.fromAddress) {
             throw new Error("You cannot sign");
         }
-        const hashTx = this.calculateHash();
-        const sign = signingKey.sign(hashTx, 'base64');
+        var hashTx = this.calculateHash();
+        var sign = signingKey.sign(hashTx, 'base64');
         this.signature = sign.toDER('hex');
-    }
-    isValid() {
+    };
+    Transaction.prototype.isValid = function () {
         if (this.fromAddress === null)
             return true;
         if (!this.signature || this.signature.length === 0) {
             throw new Error('No signature');
         }
-        const publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
+        var publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
         return publicKey.verify(this.calculateHash(), this.signature);
-    }
-}
-class Block {
-    constructor(timestamp, transactions, previousHash = '') {
+    };
+    return Transaction;
+}());
+exports.Transaction = Transaction;
+var Block = /** @class */ (function () {
+    function Block(timestamp, transactions, previousHash) {
+        if (previousHash === void 0) { previousHash = ''; }
         this.timestamp = timestamp;
         this.transactions = transactions;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
         this.nonce = 0;
     }
-    calculateHash() {
+    Block.prototype.calculateHash = function () {
         return crypto.createHmac('sha256', this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
-    }
-    mineBlock(difficulty) {
+    };
+    Block.prototype.mineBlock = function (difficulty) {
         while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
             this.nonce++;
             this.hash = this.calculateHash();
         }
         console.log("Mined: " + this.hash);
-    }
-    haveValidTransactions() {
-        for (const transaction of this.transactions) {
+    };
+    Block.prototype.haveValidTransactions = function () {
+        for (var _i = 0, _a = this.transactions; _i < _a.length; _i++) {
+            var transaction = _a[_i];
             if (transaction.isValid()) {
                 return false;
             }
         }
         return true;
-    }
-}
-class Blockchain {
-    constructor() {
+    };
+    return Block;
+}());
+exports.Block = Block;
+var Blockchain = /** @class */ (function () {
+    function Blockchain() {
         this.chain = [this.createGenesisBlock()];
         this.difficulty = 3;
         this.miningReward = 100;
         this.pendingTransactions = [];
     }
-    createGenesisBlock() {
+    Blockchain.prototype.createGenesisBlock = function () {
         return new Block(Date.now(), new Array(), "");
-    }
-    getLatestBlock() {
+    };
+    Blockchain.prototype.getLatestBlock = function () {
         return this.chain[this.chain.length - 1];
-    }
-    minePendingTransactions(miningRewardAddress) {
-        let block = new Block(Date.now(), this.pendingTransactions);
+    };
+    Blockchain.prototype.minePendingTransactions = function (miningRewardAddress) {
+        var block = new Block(Date.now(), this.pendingTransactions);
         block.mineBlock(this.difficulty);
         console.log("Block mined");
         this.chain.push(block);
         this.pendingTransactions = [
             new Transaction(null, miningRewardAddress, this.miningReward)
         ];
-    }
-    addTransaction(transaction) {
+    };
+    Blockchain.prototype.addTransaction = function (transaction) {
         if (!transaction.fromAddress || !transaction.toAddress) {
             throw new Error('Transaction must include from,to address');
         }
@@ -115,11 +127,13 @@ class Blockchain {
             throw new Error('Transaction invalid');
         }
         this.pendingTransactions.push(transaction);
-    }
-    getBalanceOfAddress(address) {
-        let balance = 0;
-        for (const block of this.chain) {
-            for (const trans of block.transactions) {
+    };
+    Blockchain.prototype.getBalanceOfAddress = function (address) {
+        var balance = 0;
+        for (var _i = 0, _a = this.chain; _i < _a.length; _i++) {
+            var block = _a[_i];
+            for (var _b = 0, _c = block.transactions; _b < _c.length; _b++) {
+                var trans = _c[_b];
                 if (trans.fromAddress === address) {
                     balance -= trans.amount;
                 }
@@ -129,11 +143,11 @@ class Blockchain {
             }
         }
         return balance;
-    }
-    isChainValid() {
-        for (let i = 1; i < this.chain.length; i++) {
-            const currentBlock = this.chain[i];
-            const previousBlock = this.chain[i - 1];
+    };
+    Blockchain.prototype.isChainValid = function () {
+        for (var i = 1; i < this.chain.length; i++) {
+            var currentBlock = this.chain[i];
+            var previousBlock = this.chain[i - 1];
             if (!currentBlock.haveValidTransactions()) {
                 return false;
             }
@@ -145,19 +159,7 @@ class Blockchain {
             }
         }
         return true;
-    }
-}
-const user_1 = ec.genKeyPair();
-const user_2 = ec.genKeyPair();
-const miner_1 = ec.genKeyPair();
-let testCoin = new Blockchain();
-//create transactions
-const transaction1 = new Transaction(user_1.getPublic('hex'), user_2.getPublic('hex'), 50);
-transaction1.signTransaction(user_1);
-testCoin.addTransaction(transaction1);
-console.log("Start miner");
-testCoin.minePendingTransactions(miner_1.getPublic('hex'));
-console.log("miner-address balance = ", testCoin.getBalanceOfAddress(miner_1.getPublic('hex')));
-testCoin.minePendingTransactions(miner_1.getPublic('hex'));
-console.log("miner-address balance = ", testCoin.getBalanceOfAddress(miner_1.getPublic('hex')));
-console.log("user_1 balance = ", testCoin.getBalanceOfAddress(user_1.getPublic('hex')));
+    };
+    return Blockchain;
+}());
+exports.Blockchain = Blockchain;
